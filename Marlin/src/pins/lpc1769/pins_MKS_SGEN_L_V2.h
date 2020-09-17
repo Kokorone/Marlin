@@ -16,7 +16,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
 #pragma once
@@ -35,11 +35,12 @@
 //
 // EEPROM, MKS SGEN_L V2.0 hardware has 4K EEPROM on the board
 //
-#define FLASH_EEPROM_EMULATION
-//#define SDCARD_EEPROM_EMULATION
-//#define SDCARD_EEPROM_EMULATION
-//#define I2C_EEPROM  // AT24C32
-//#define E2END       0xFFF // 4KB
+#if NO_EEPROM_SELECTED
+  //#define SDCARD_EEPROM_EMULATION
+  //#define I2C_EEPROM                            // AT24C32
+  #define FLASH_EEPROM_EMULATION
+  #define MARLIN_EEPROM_SIZE 0x1000               // 4KB
+#endif
 
 //
 // Servos
@@ -101,8 +102,6 @@
 #ifndef Z_MIN_PROBE_PIN
   #define Z_MIN_PROBE_PIN                  P1_24
 #endif
-
-#define FIL_RUNOUT_PIN                     P1_24           
 
 //
 // Steppers
@@ -179,28 +178,20 @@
   //
   // Software serial
   //
-
   #define X_SERIAL_TX_PIN                  P1_01
   #define X_SERIAL_RX_PIN                  P1_01
-
   #define Y_SERIAL_TX_PIN                  P1_08
   #define Y_SERIAL_RX_PIN                  P1_08
-
   #define Z_SERIAL_TX_PIN                  P1_10
   #define Z_SERIAL_RX_PIN                  P1_10
-
   #define E0_SERIAL_TX_PIN                 P1_15
   #define E0_SERIAL_RX_PIN                 P1_15
-
   #define E1_SERIAL_TX_PIN                 P1_17
   #define E1_SERIAL_RX_PIN                 P1_17
 
-  #define Z2_SERIAL_TX_PIN                 P1_17
-  #define Z2_SERIAL_RX_PIN                 P1_17
-
   // Reduce baud rate to improve software serial reliability
   #define TMC_BAUD_RATE 19200
-#endif // TMC2208 || TMC2209
+#endif // HAS_TMC_UART
 
 //
 // Temperature Sensors

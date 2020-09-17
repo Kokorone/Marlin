@@ -41,9 +41,44 @@ To build Marlin 2.0 you'll need [Arduino IDE 1.8.8 or newer](https://www.arduino
 
 ## Submitting Changes
 
-- Submit **Bug Fixes** as Pull Requests to the ([bugfix-2.0.x](https://github.com/MarlinFirmware/Marlin/tree/bugfix-2.0.x)) branch.
-- Follow the [Coding Standards](http://marlinfw.org/docs/development/coding_standards.html) to gain points with the maintainers.
-- Please submit your questions and concerns to the [Issue Queue](https://github.com/MarlinFirmware/Marlin/issues).
+  boards|processor|speed|flash|sram|logic|fpu
+  ----|---------|-----|-----|----|-----|---
+  [Arduino STM32](https://github.com/rogerclarkmelbourne/Arduino_STM32)|[STM32F1](https://www.st.com/en/microcontrollers-microprocessors/stm32f103.html) ARM-Cortex M3|72MHz|256-512k|48-64k|3.3V|no
+  [Geeetech3D GTM32](https://github.com/Geeetech3D/Diagram/blob/master/Rostock301/Hardware_GTM32_PRO_VB.pdf)|[STM32F1](https://www.st.com/en/microcontrollers-microprocessors/stm32f103.html) ARM-Cortex M3|72MHz|256-512k|48-64k|3.3V|no
+
+  #### STM32F4
+
+  boards|processor|speed|flash|sram|logic|fpu
+  ----|---------|-----|-----|----|-----|---
+  [STEVAL-3DP001V1](https://www.st.com/en/evaluation-tools/steval-3dp001v1.html)|[STM32F401VE Arm-Cortex M4](https://www.st.com/en/microcontrollers-microprocessors/stm32f401ve.html)|84MHz|512k|64+32k|3.3-5V|yes
+
+  #### Teensy++ 2.0
+
+  boards|processor|speed|flash|sram|logic|fpu
+  ----|---------|-----|-----|----|-----|---
+  [Teensy++ 2.0](https://www.microchip.com/wwwproducts/en/AT90USB1286)|[AT90USB1286](https://www.microchip.com/wwwproducts/en/AT90USB1286)|16MHz|128k|8k|5V|no
+
+  #### Teensy 3.1 / 3.2
+
+  boards|processor|speed|flash|sram|logic|fpu
+  ----|---------|-----|-----|----|-----|---
+  [Teensy 3.2](https://www.pjrc.com/store/teensy32.html)|[MK20DX256VLH7](https://www.mouser.com/ProductDetail/NXP-Freescale/MK20DX256VLH7) ARM-Cortex M4|72MHz|256k|32k|3.3V-5V|yes
+
+  #### Teensy 3.5 / 3.6
+
+  boards|processor|speed|flash|sram|logic|fpu
+  ----|---------|-----|-----|----|-----|---
+  [Teensy 3.5](https://www.pjrc.com/store/teensy35.html)|[MK64FX512VMD12](https://www.mouser.com/ProductDetail/NXP-Freescale/MK64FX512VMD12) ARM-Cortex M4|120MHz|512k|192k|3.3-5V|yes
+  [Teensy 3.6](https://www.pjrc.com/store/teensy36.html)|[MK66FX1M0VMD18](https://www.mouser.com/ProductDetail/NXP-Freescale/MK66FX1M0VMD18) ARM-Cortex M4|180MHz|1M|256k|3.3V|yes
+
+  #### Teensy 4.0 / 4.1
+
+  boards|processor|speed|flash|sram|logic|fpu
+  ----|---------|-----|-----|----|-----|---
+  [Teensy 4.0](https://www.pjrc.com/store/teensy40.html)|[IMXRT1062](https://www.mouser.com/new/nxp-semiconductors/nxp-imx-rt1060-crossover-processor/) ARM-Cortex M7|600MHz|1M|2M|3.3V|yes
+  [Teensy 4.1](https://www.pjrc.com/store/teensy41.html)|[IMXRT1062](https://www.mouser.com/new/nxp-semiconductors/nxp-imx-rt1060-crossover-processor/) ARM-Cortex M7|600MHz|1M|2M|3.3V|yes
+
+## Submitting Patches
 
 ## Marlin Support
 

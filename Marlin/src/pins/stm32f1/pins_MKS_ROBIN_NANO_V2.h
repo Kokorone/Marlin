@@ -325,13 +325,21 @@
   #define LCD_PINS_RS                       PC6
 
 #elif ENABLED(TFT_480x320_SPI)
+  #ifndef XPT2046_X_CALIBRATION
     #define XPT2046_X_CALIBRATION         -17253
+  #endif
+  #ifndef XPT2046_Y_CALIBRATION
     #define XPT2046_Y_CALIBRATION          11579
+  #endif
+  #ifndef XPT2046_X_OFFSET
     #define XPT2046_X_OFFSET                 514
+  #endif
+  #ifndef XPT2046_Y_OFFSET
     #define XPT2046_Y_OFFSET                 -24
+  #endif
 
-    #define TFT_DRIVER                    ST7796
-    #define TFT_BUFFER_SIZE                14400
+  #define TFT_DRIVER                      ST7796
+  #define TFT_BUFFER_SIZE                  14400
 
 #endif
 
@@ -350,10 +358,6 @@
     #define DOGLCD_CS                       PE15
     #define DOGLCD_SCK                      PA5
     #define DOGLCD_MOSI                     PA7
-
-    // Required for MKS_MINI_12864 with this board
-    #define MKS_LCD12864B
-    #undef SHOW_BOOTSCREEN
 
   #else                                           // !MKS_MINI_12864
 
