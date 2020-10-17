@@ -44,7 +44,7 @@
 #include "../../../../inc/MarlinConfig.h"
 
 #include HAL_PATH(../../HAL, tft/xpt2046.h)
-#include "../../../ultralcd.h"
+#include "../../../marlinui.h"
 XPT2046 touch;
 
 #if ENABLED(POWER_LOSS_RECOVERY)
@@ -123,8 +123,11 @@ void tft_lvgl_init() {
 
   //spi_flash_read_test();
   #if ENABLED(SDSUPPORT)
+    watchdog_refresh();
     UpdateAssets();
   #endif
+
+  watchdog_refresh();
   mks_test_get();
 
   touch.Init();
