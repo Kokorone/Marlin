@@ -123,7 +123,7 @@ bool MarlinUI::detected() { return true; }
           custom_start_bmp
         #endif
       ;
-      TERN(CUSTOM_BOOTSCREEN_ANIMATED,,UNUSED(frame));
+      UNUSED(frame);
 
       u8g.drawBitmapP(left, top, CUSTOM_BOOTSCREEN_BMP_BYTEWIDTH, CUSTOM_BOOTSCREEN_BMPHEIGHT, bmp);
 
@@ -423,7 +423,7 @@ void MarlinUI::clear_lcd() { } // Automatically cleared by Picture Loop
     if (onpage) lcd_put_u8str_ind_P(0, baseline, pstr, itemIndex, itemString);
 
     // If a value is included, print a colon, then print the value right-justified
-    if (value != nullptr) {
+    if (value) {
       lcd_put_wchar(':');
       if (extra_row) {
         // Assume that value is numeric (with no descender)

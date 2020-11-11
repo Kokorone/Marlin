@@ -81,7 +81,7 @@ void MarlinUI::save_previous_screen() {
 }
 
 void MarlinUI::_goto_previous_screen(TERN_(TURBO_BACK_MENU_ITEM, const bool is_back/*=false*/)) {
-  TERN(TURBO_BACK_MENU_ITEM,,constexpr bool is_back = false);
+  IF_DISABLED(TURBO_BACK_MENU_ITEM, constexpr bool is_back = false);
   TERN_(HAS_TOUCH_XPT2046, on_edit_screen = false);
   if (screen_history_depth > 0) {
     menuPosition &sh = screen_history[--screen_history_depth];
@@ -129,7 +129,7 @@ void MenuEditItemBase::edit_screen(strfunc_t strfunc, loadfunc_t loadfunc) {
   if (ui.should_draw())
     draw_edit_screen(strfunc(ui.encoderPosition + minEditValue));
   if (ui.lcd_clicked || (liveEdit && ui.should_draw())) {
-    if (editValue != nullptr) loadfunc(editValue, ui.encoderPosition + minEditValue);
+    if (editValue) loadfunc(editValue, ui.encoderPosition + minEditValue);
     if (callbackFunc && (liveEdit || ui.lcd_clicked)) (*callbackFunc)();
     if (ui.use_click()) ui.goto_previous_screen();
   }
