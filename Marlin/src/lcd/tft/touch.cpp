@@ -156,10 +156,11 @@ void Touch::touch(touch_control_t *control) {
 
     case MENU_SCREEN: ui.goto_screen((screenFunc_t)control->data); break;
     case BACK: ui.goto_previous_screen(); break;
-    case CLICK:
+    case MENU_CLICK:
       TERN_(SINGLE_TOUCH_NAVIGATION, ui.encoderPosition = control->data);
       ui.lcd_clicked = true;
       break;
+    case CLICK: ui.lcd_clicked = true; break;
     #if HAS_RESUME_CONTINUE
       case RESUME_CONTINUE: extern bool wait_for_user; wait_for_user = false; break;
     #endif
@@ -185,22 +186,28 @@ void Touch::touch(touch_control_t *control) {
       ui.clear_lcd();
       if (heater >= 0) { // HotEnd
         #if HOTENDS == 1
-          MenuItem_int3::action((const char *)GET_TEXT_F(MSG_NOZZLE), &thermalManager.temp_hotend[0].target, 0, thermalManager.heater_maxtemp[0] - 15, []{ thermalManager.start_watching_hotend(0); });
+          MenuItem_int3::action((const char *)GET_TEXT_F(MSG_NOZZLE), &thermalManager.temp_hotend[0].target, 0, thermalManager.hotend_max_target(0), []{ thermalManager.start_watching_hotend(0); });
         #else
           MenuItemBase::itemIndex = heater;
-          MenuItem_int3::action((const char *)GET_TEXT_F(MSG_NOZZLE_N), &thermalManager.temp_hotend[heater].target, 0, thermalManager.heater_maxtemp[heater] - 15, []{ thermalManager.start_watching_hotend(MenuItemBase::itemIndex); });
+          MenuItem_int3::action((const char *)GET_TEXT_F(MSG_NOZZLE_N), &thermalManager.temp_hotend[heater].target, 0, thermalManager.hotend_max_target(heater), []{ thermalManager.start_watching_hotend(MenuItemBase::itemIndex); });
         #endif
       }
       #if HAS_HEATED_BED
         else if (heater == H_BED) {
-          MenuItem_int3::action((const char *)GET_TEXT_F(MSG_BED), &thermalManager.temp_bed.target, 0, BED_MAXTEMP - 10, thermalManager.start_watching_bed);
+          MenuItem_int3::action((const char *)GET_TEXT_F(MSG_BED), &thermalManager.temp_bed.target, 0, BED_MAX_TARGET, thermalManager.start_watching_bed);
         }
       #endif
       #if HAS_HEATED_CHAMBER
         else if (heater == H_CHAMBER) {
-          MenuItem_int3::action((const char *)GET_TEXT_F(MSG_CHAMBER), &thermalManager.temp_chamber.target, 0, CHAMBER_MAXTEMP - 10, thermalManager.start_watching_chamber);
+          MenuItem_int3::action((const char *)GET_TEXT_F(MSG_CHAMBER), &thermalManager.temp_chamber.target, 0, CHAMBER_MAX_TARGET, thermalManager.start_watching_chamber);
         }
       #endif
+      #if HAS_COOLER
+        else if (heater == H_COOLER) {
+          MenuItem_int3::action((const char *)GET_TEXT_F(MSG_COOLER), &thermalManager.temp_cooler.target, 0, COOLER_MAX_TARGET, thermalManager.start_watching_cooler);
+        }
+      #endif
+
       break;
     case FAN:
       ui.clear_lcd();

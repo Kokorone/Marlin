@@ -25,9 +25,7 @@
  * Einsy-Retro pin assignments
  */
 
-#if NOT_TARGET(__AVR_ATmega2560__)
-  #error "Oops! Select 'Arduino Mega 2560 or Rambo' in 'Tools > Board.'"
-#endif
+#include "env_validate.h"
 
 #define BOARD_INFO_NAME "Einsy Retro"
 
@@ -193,6 +191,10 @@
     #define BEEPER_PIN                        84  // AUX-4
 
     #define SD_DETECT_PIN                     15
+
+    #if ENABLED(REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER)
+      #define BTN_ENC_EN             LCD_PINS_D7  // Detect the presence of the encoder
+    #endif
 
   #endif // IS_ULTIPANEL || TOUCH_UI_ULTIPANEL || TOUCH_UI_FTDI_EVE
 
