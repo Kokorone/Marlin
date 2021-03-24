@@ -180,8 +180,12 @@ static uint8_t _card_percent = 0;
 static uint16_t _remain_time = 0;
 
 #if ENABLED(PAUSE_HEAT)
-  TERN_(HAS_HOTEND, uint16_t resume_hotend_temp = 0);
-  TERN_(HAS_HEATED_BED, uint16_t resume_bed_temp = 0);
+  #if ENABLED(HAS_HOTEND)
+    uint16_t resume_hotend_temp = 0;
+  #endif
+  #if ENABLED(HAS_HEATED_BED)
+    uint16_t resume_bed_temp = 0;
+  #endif
 #endif
 
 #if HAS_ZOFFSET_ITEM
@@ -398,7 +402,7 @@ void Draw_Title(const __FlashStringHelper * title) {
 }
 
 void Clear_Menu_Area() {
-  DWIN_Draw_Rectangle(1, Color_Bg_Black, 0, 31, DWIN_WIDTH, STATUS_Y);
+  DWIN_Draw_Rectangle(1, Color_Bg_Black, 0, 31, DWIN_WIDTH, STATUS_Y - 1);
 }
 
 void Clear_Main_Window() {
@@ -1578,20 +1582,22 @@ void _draw_xyz_position(const bool force) {
 
 void update_variable() {
   #if HAS_HOTEND
-    static float _hotendtemp = 0;
-    const bool _new_hotend_temp = _hotendtemp != thermalManager.temp_hotend[0].celsius;
-    if (_new_hotend_temp) _hotendtemp = thermalManager.temp_hotend[0].celsius;
-    static int16_t _hotendtarget = 0;
-    const bool _new_hotend_target = _hotendtarget != thermalManager.temp_hotend[0].target;
-    if (_new_hotend_target) _hotendtarget = thermalManager.temp_hotend[0].target;
+    static celsius_t _hotendtemp = 0, _hotendtarget = 0;
+    const celsius_t hc = thermalManager.degHotend(0),
+                    ht = thermalManager.degTargetHotend(0);
+    const bool _new_hotend_temp = _hotendtemp != hc,
+               _new_hotend_target = _hotendtarget != ht;
+    if (_new_hotend_temp) _hotendtemp = hc;
+    if (_new_hotend_target) _hotendtarget = ht;
   #endif
   #if HAS_HEATED_BED
-    static float _bedtemp = 0;
-    const bool _new_bed_temp = _bedtemp != thermalManager.temp_bed.celsius;
-    if (_new_bed_temp) _bedtemp = thermalManager.temp_bed.celsius;
-    static int16_t _bedtarget = 0;
-    const bool _new_bed_target = _bedtarget != thermalManager.temp_bed.target;
-    if (_new_bed_target) _bedtarget = thermalManager.temp_bed.target;
+    static celsius_t _bedtemp = 0, _bedtarget = 0;
+    const celsius_t bc = thermalManager.degBed(),
+                    bt = thermalManager.degTargetBed();
+    const bool _new_bed_temp = _bedtemp != bc,
+               _new_bed_target = _bedtarget != bt;
+    if (_new_bed_temp) _bedtemp = bc;
+    if (_new_bed_target) _bedtarget = bt;
   #endif
   #if HAS_FAN
     static uint8_t _fanspeed = 0;
@@ -2146,7 +2152,7 @@ void HMI_SelectFile() {
 
       card.openAndPrintFile(card.filename);
 
-      #if FAN_COUNT > 0
+      #if HAS_FAN
         // All fans on for Ender 3 v2 ?
         // The slicer should manage this for us.
         //for (uint8_t i = 0; i < FAN_COUNT; i++)
@@ -3786,6 +3792,13 @@ void DWIN_CompletedHoming() {
 
 void DWIN_CompletedLeveling() {
   if (checkkey == Leveling) Goto_MainMenu();
+}
+
+void DWIN_StatusChanged(const char *text) {
+  DWIN_Draw_Rectangle(1, Color_Bg_Blue, 0, STATUS_Y, DWIN_WIDTH, STATUS_Y + 20);
+  const int8_t x = _MAX(0U, DWIN_WIDTH - strlen_P(text) * MENU_CHR_W) / 2;
+  DWIN_Draw_String(false, false, font8x16, Color_White, Color_Bg_Blue, x, STATUS_Y + 2, F(text));
+  DWIN_UpdateLCD();
 }
 
 #endif // DWIN_CREALITY_LCD
